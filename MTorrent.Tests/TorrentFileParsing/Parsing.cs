@@ -1,5 +1,8 @@
 ﻿using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.IO;
+using System.Text;
+using Torrent.BEncoding.Serialization;
 using Xunit;
 
 namespace Torrent.Tests.TorrentFileParsing
@@ -40,6 +43,23 @@ namespace Torrent.Tests.TorrentFileParsing
                 Titanic = "Titanic.1997.1080p",
                 Killswitch = "Killswitch.2014.1080p.mp4",
                 InternetsOwnBoy = "The.Internets.Own.Boy.The.Story.of.Aaron.Swartz.2014.1080p";
+        }
+
+        private static void TestTorrent_ValidBEncode(string bencode, bool valid, bool strictlyValid)
+        {
+            Assert.True(BEncodingSerializer.TryParse(bencode, out BDictionary _), "This test isn't about valid BEncoding");
+            TestTorrent(bencode, valid, strictlyValid);
+        }
+
+        private static void TestTorrent(string bencode, bool valid, bool strictlyValid)
+        {
+            Debug.Assert(!strictlyValid || valid, "If strictly valid it should also be non-strictly valid");
+
+            byte[] torrentFileBytes = Encoding.UTF8.GetBytes(bencode);
+
+            Assert.Equal(valid, TorrentFile.TryParse(torrentFileBytes, out _, strictComplianceParsing: false));
+            if (valid)
+                Assert.Equal(strictlyValid, TorrentFile.TryParse(torrentFileBytes, out _, strictComplianceParsing: true));
         }
     }
 }
