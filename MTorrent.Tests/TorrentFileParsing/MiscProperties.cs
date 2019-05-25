@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Miha Zupan. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
+using System;
 using Xunit;
 
 namespace Torrent.Tests.TorrentFileParsing
@@ -19,6 +20,14 @@ namespace Torrent.Tests.TorrentFileParsing
         }
 
         [Fact]
+        public void ParsesCommentFromFile()
+        {
+            TorrentFile torrentFile = ReadAndParseTorrentFile(TestFiles.ProjectEuler);
+
+            Assert.Equal("This is some Project Euler", torrentFile.Comment);
+        }
+
+        [Fact]
         public void ParsesCreatedBy()
         {
             string bencode = "d10:created by7:Someone4:infod6:lengthi0e4:name3:foo12:piece lengthi16384e6:pieces0:ee";
@@ -29,13 +38,30 @@ namespace Torrent.Tests.TorrentFileParsing
         }
 
         [Fact]
+        public void ParsesCreatedByFromFile()
+        {
+            TorrentFile torrentFile = ReadAndParseTorrentFile(TestFiles.ProjectEuler);
+
+            Assert.Equal("uTorrent/3.5.5", torrentFile.CreatedBy);
+        }
+
+        [Fact]
         public void ParsesCreationDate()
         {
-            string bencode = "d13:creation datei123123e4:infod6:lengthi0e4:name3:foo12:piece lengthi16384e6:pieces0:ee";
+            string bencode = "d13:creation datei330e4:infod6:lengthi0e4:name3:foo12:piece lengthi16384e6:pieces0:ee";
 
             var torrentFile = ParseTorrentFile(bencode);
 
-            Assert.Equal(123123, torrentFile.CreationDate);
+            Assert.Equal(new DateTime(1970, 1, 1, 0, 5, 30), torrentFile.CreationDate);
+        }
+
+        [Fact]
+        public void ParsesCreationDateFromFile()
+        {
+            TorrentFile torrentFile = ReadAndParseTorrentFile(TestFiles.ProjectEuler);
+
+            Assert.Equal(1558810233, torrentFile.CreationTimeStamp);
+            Assert.Equal(new DateTime(2019, 5, 25, 18, 50, 33), torrentFile.CreationDate);
         }
 
         [Theory]
@@ -51,6 +77,14 @@ namespace Torrent.Tests.TorrentFileParsing
             var torrentFile = ParseTorrentFile(bencode);
 
             Assert.Equal(announceList, torrentFile.Trackers);
+        }
+
+        [Fact]
+        public void ParsesAnnounceListFromFile()
+        {
+            TorrentFile torrentFile = ReadAndParseTorrentFile(TestFiles.ProjectEuler);
+
+            Assert.Equal(new[] { "udp://tracker.mihazupan.me" }, torrentFile.Trackers);
         }
     }
 }

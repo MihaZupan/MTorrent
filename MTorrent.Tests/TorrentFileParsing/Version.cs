@@ -13,6 +13,7 @@ namespace Torrent.Tests.TorrentFileParsing
         [InlineData(TestFiles.Titanic, true, false)]
         [InlineData(TestFiles.Killswitch, true, true)]
         [InlineData(TestFiles.InternetsOwnBoy, true, false)]
+        [InlineData(TestFiles.ProjectEuler, true, false)]
         public void ParsesCorrectVersions(string torrentFileName, bool v1, bool v2)
         {
             TorrentFile torrentFile = ReadAndParseTorrentFile(torrentFileName);

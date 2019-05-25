@@ -69,7 +69,8 @@ namespace Torrent
 
         public string Comment = string.Empty;
         public string CreatedBy = string.Empty;
-        public long CreationDate = 0;
+        public long CreationTimeStamp = -1;
+        public DateTime? CreationDate = null;
 
         internal TorrentFile(byte[] infoHashV1, byte[] infoHashV2)
         {
@@ -242,8 +243,13 @@ namespace Torrent
                 torrent.CreatedBy = createdBy.String;
 
             if (dictionary.TryGet("creation date", out BInteger bcreationDate) && bcreationDate.TryAs(out long creationDate))
-                if (creationDate > 0)
-                    torrent.CreationDate = creationDate;
+            {
+                if (creationDate >= 0)
+                {
+                    torrent.CreationTimeStamp = creationDate;
+                    torrent.CreationDate = DateTime.UnixEpoch.AddSeconds(creationDate);
+                }
+            }
 
 
             ReadOnlySpan<byte> infoSpan = bytes.Slice(info.SpanStart, info.SpanEnd - info.SpanStart);

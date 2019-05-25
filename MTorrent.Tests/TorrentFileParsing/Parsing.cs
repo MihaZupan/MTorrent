@@ -53,7 +53,8 @@ namespace Torrent.Tests.TorrentFileParsing
                 Ubuntu = "ubuntu-19.04-desktop-amd64.iso",
                 Titanic = "Titanic.1997.1080p",
                 Killswitch = "Killswitch.2014.1080p.mp4",
-                InternetsOwnBoy = "The.Internets.Own.Boy.The.Story.of.Aaron.Swartz.2014.1080p";
+                InternetsOwnBoy = "The.Internets.Own.Boy.The.Story.of.Aaron.Swartz.2014.1080p",
+                ProjectEuler = "ProjectEuler";
         }
 
         private static void TestTorrent_ValidBEncode(string bencode, bool valid, bool strictlyValid)

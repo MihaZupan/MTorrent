@@ -15,6 +15,7 @@ namespace Torrent.Tests.TorrentFileParsing
         [InlineData(TestFiles.Killswitch, "FE3DFA6764C01AB0A8528EF768DDCEDF2CC0915B")]
         [InlineData(TestFiles.Killswitch, "0BBF263641F111C6122A6019319D7573D10FFABFC6981710218C6CEBA775CACF")]
         [InlineData(TestFiles.InternetsOwnBoy, "CBECA3B91C54DB4B7A7E16BC0CCD9707E00665B5")]
+        [InlineData(TestFiles.ProjectEuler, "5B47CA743B1B4AE79F06ED01A8793F92DDD4ACC1")]
         public void ParsesToCorrectInfoHash(string torrentFileName, string infoHashHex)
         {
             TorrentFile torrentFile = ReadAndParseTorrentFile(torrentFileName);
