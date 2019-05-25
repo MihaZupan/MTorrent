@@ -242,7 +242,7 @@ namespace Torrent
                 torrent.CreatedBy = createdBy.String;
 
             if (dictionary.TryGet("creation date", out BInteger bcreationDate) && bcreationDate.TryAs(out long creationDate))
-                if (creationDate >= 0)
+                if (creationDate > 0)
                     torrent.CreationDate = creationDate;
 
 

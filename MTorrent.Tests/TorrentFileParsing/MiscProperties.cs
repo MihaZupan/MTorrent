@@ -37,5 +37,20 @@ namespace Torrent.Tests.TorrentFileParsing
 
             Assert.Equal(123123, torrentFile.CreationDate);
         }
+
+        [Theory]
+        [InlineData("d4:infod6:lengthi0e4:name3:foo12:piece lengthi16384e6:pieces0:ee", new string[] { })]
+        [InlineData("d8:announce13:udp://foo.bar4:infod6:lengthi0e4:name3:foo12:piece lengthi16384e6:pieces0:ee", new string[] { "udp://foo.bar" })]
+        [InlineData("d13:announce-listll13:udp://foo.baree4:infod6:lengthi0e4:name3:foo12:piece lengthi16384e6:pieces0:ee", new string[] { "udp://foo.bar" })]
+        // TorrentEngine should filter out duplicates
+        [InlineData("d8:announce13:udp://foo.bar13:announce-listll13:udp://foo.baree4:infod6:lengthi0e4:name3:foo12:piece lengthi16384e6:pieces0:ee", new string[] { "udp://foo.bar", "udp://foo.bar" })]
+        [InlineData("d13:announce-listll14:http://foo.barel13:udp://foo.baree4:infod6:lengthi0e4:name3:foo12:piece lengthi16384e6:pieces0:ee", new string[] { "http://foo.bar", "udp://foo.bar" })]
+        [InlineData("d13:announce-listll24:https://foo.bar/announceel13:udp://foo.baree4:infod6:lengthi0e4:name3:foo12:piece lengthi16384e6:pieces0:ee", new string[] { "https://foo.bar/announce", "udp://foo.bar" })]
+        public void ParsesAnnounceLists(string bencode, string[] announceList)
+        {
+            var torrentFile = ParseTorrentFile(bencode);
+
+            Assert.Equal(announceList, torrentFile.Trackers);
+        }
     }
 }
