@@ -86,5 +86,24 @@ namespace Torrent.Tests.TorrentFileParsing
 
             Assert.Equal(new[] { "udp://tracker.mihazupan.me" }, torrentFile.Trackers);
         }
+
+        [Theory]
+        [InlineData("d4:infod6:lengthi0e4:name3:foo12:piece lengthi16384e6:pieces0:ee", null)]
+        [InlineData("d8:encoding5:UTF-84:infod6:lengthi0e4:name3:foo12:piece lengthi16384e6:pieces0:ee", "UTF-8")]
+        [InlineData("d8:encoding0:4:infod6:lengthi0e4:name3:foo12:piece lengthi16384e6:pieces0:ee", "")]
+        public void ParsesEncoding(string bencode, string encoding)
+        {
+            var torrentFile = ParseTorrentFile(bencode);
+
+            Assert.Equal(encoding, torrentFile.Encoding);
+        }
+
+        [Fact]
+        public void ParsesEncodingFromFile()
+        {
+            TorrentFile torrentFile = ReadAndParseTorrentFile(TestFiles.ProjectEuler);
+
+            Assert.Equal("UTF-8", torrentFile.Encoding);
+        }
     }
 }

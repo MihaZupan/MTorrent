@@ -67,10 +67,11 @@ namespace Torrent
         public long TotalBytes { get; private set; }
         public int FileCount => Files.Length;
 
-        public string Comment = string.Empty;
-        public string CreatedBy = string.Empty;
+        public string Comment = null;
+        public string CreatedBy = null;
         public long CreationTimeStamp = -1;
         public DateTime? CreationDate = null;
+        public string Encoding = null;
 
         internal TorrentFile(byte[] infoHashV1, byte[] infoHashV2)
         {
@@ -250,6 +251,9 @@ namespace Torrent
                     torrent.CreationDate = DateTime.UnixEpoch.AddSeconds(creationDate);
                 }
             }
+
+            if (dictionary.TryGet("encoding", out BString encoding) && encoding.IsString)
+                torrent.Encoding = encoding.String;
 
 
             ReadOnlySpan<byte> infoSpan = bytes.Slice(info.SpanStart, info.SpanEnd - info.SpanStart);
