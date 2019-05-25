@@ -38,6 +38,14 @@ namespace Torrent.Tests.TorrentFileParsing
 
             return torrentFile;
         }
+        private static TorrentFile ParseTorrentFile(string bencode)
+        {
+            var torrentBytes = Encoding.UTF8.GetBytes(bencode);
+
+            Assert.True(TorrentFile.TryParse(torrentBytes, out TorrentFile torrentFile, strictComplianceParsing: true), "Failed to parse torrent");
+
+            return torrentFile;
+        }
 
         private static class TestFiles
         {

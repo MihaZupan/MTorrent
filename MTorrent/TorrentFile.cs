@@ -67,6 +67,10 @@ namespace Torrent
         public long TotalBytes { get; private set; }
         public int FileCount => Files.Length;
 
+        public string Comment = string.Empty;
+        public string CreatedBy = string.Empty;
+        public long CreationDate = 0;
+
         internal TorrentFile(byte[] infoHashV1, byte[] infoHashV2)
         {
             if (infoHashV1 is null && infoHashV2 is null)
@@ -230,6 +234,16 @@ namespace Torrent
                             if (announceString.IsString)
                                 if (StringHelpers.LooksLikeValidAnnounceURL(announceString.String))
                                     torrent.Trackers.Add(announceString.String);
+
+            if (dictionary.TryGet("comment", out BString comment) && comment.IsString)
+                torrent.Comment = comment.String;
+
+            if (dictionary.TryGet("created by", out BString createdBy) && createdBy.IsString)
+                torrent.CreatedBy = createdBy.String;
+
+            if (dictionary.TryGet("creation date", out BInteger bcreationDate) && bcreationDate.TryAs(out long creationDate))
+                if (creationDate >= 0)
+                    torrent.CreationDate = creationDate;
 
 
             ReadOnlySpan<byte> infoSpan = bytes.Slice(info.SpanStart, info.SpanEnd - info.SpanStart);
