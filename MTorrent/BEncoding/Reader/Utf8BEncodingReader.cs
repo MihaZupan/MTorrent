@@ -6,7 +6,7 @@ using System.Buffers.Text;
 using System.Diagnostics;
 using System.Numerics;
 
-namespace Torrent.BEncoding
+namespace MTorrent.BEncoding
 {
     public ref struct Utf8BEncodingReader
     {

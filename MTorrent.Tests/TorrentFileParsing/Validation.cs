@@ -3,7 +3,7 @@
 // See the license.txt file in the project root for more information.
 using Xunit;
 
-namespace Torrent.Tests.TorrentFileParsing
+namespace MTorrent.Tests.torrentInfoParsing
 {
     public partial class Parsing
     {

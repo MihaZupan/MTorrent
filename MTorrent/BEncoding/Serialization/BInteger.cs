@@ -4,7 +4,7 @@
 using System.Diagnostics;
 using System.Numerics;
 
-namespace Torrent.BEncoding.Serialization
+namespace MTorrent.BEncoding.Serialization
 {
     [DebuggerDisplay("{Value}")]
     public class BInteger : IBObject

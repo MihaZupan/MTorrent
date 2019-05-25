@@ -6,7 +6,7 @@ using System.Buffers.Text;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
-namespace Torrent.BEncoding
+namespace MTorrent.BEncoding
 {
     public partial class Utf8BEncodingWriter
     {

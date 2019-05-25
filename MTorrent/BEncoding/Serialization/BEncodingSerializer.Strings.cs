@@ -3,7 +3,7 @@
 // See the license.txt file in the project root for more information.
 using System;
 
-namespace Torrent.BEncoding.Serialization
+namespace MTorrent.BEncoding.Serialization
 {
     public static partial class BEncodingSerializer
     {

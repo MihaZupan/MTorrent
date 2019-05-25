@@ -5,7 +5,7 @@ using System;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace Torrent.Helpers
+namespace MTorrent.Helpers
 {
     internal static class Hex
     {

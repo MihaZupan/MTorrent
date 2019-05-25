@@ -5,37 +5,36 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Web;
-using Torrent.Enums;
-using Torrent.Helpers;
+using MTorrent.Helpers;
 
-namespace Torrent
+namespace MTorrent
 {
     public static class MagnetLink
     {
-        public static string Create(TorrentFile torrentFile, bool includeTrackers = true)
+        public static string Create(TorrentInfo torrentInfo, bool includeTrackers = true)
         {
-            if (torrentFile is null)
-                throw new ArgumentNullException(nameof(torrentFile));
+            if (torrentInfo is null)
+                throw new ArgumentNullException(nameof(torrentInfo));
 
             int size = 60 +
                 (includeTrackers ? 150 : 0) +
-                (string.IsNullOrWhiteSpace(torrentFile.DisplayName) ? 0 : torrentFile.DisplayName.Length * 2);
+                (string.IsNullOrWhiteSpace(torrentInfo.DisplayName) ? 0 : torrentInfo.DisplayName.Length * 2);
 
             StringBuilder sb = new StringBuilder(size);
 
             sb.Append("magnet:?xt=urn:btih:");
 
-            Hex.Encode(torrentFile.InfoHashV2 ?? torrentFile.InfoHashV1, sb);
+            Hex.Encode(torrentInfo.InfoHashV2 ?? torrentInfo.InfoHashV1, sb);
 
-            if (!string.IsNullOrWhiteSpace(torrentFile.DisplayName))
+            if (!string.IsNullOrWhiteSpace(torrentInfo.DisplayName))
             {
                 sb.Append("&dn=");
-                sb.Append(HttpUtility.UrlEncode(torrentFile.DisplayName));
+                sb.Append(HttpUtility.UrlEncode(torrentInfo.DisplayName));
             }
 
             if (includeTrackers)
             {
-                foreach (var tracker in torrentFile.Trackers)
+                foreach (var tracker in torrentInfo.Trackers)
                 {
                     sb.Append("&tr=");
                     sb.Append(HttpUtility.UrlEncode(tracker));
@@ -45,9 +44,9 @@ namespace Torrent
             return sb.ToString();
         }
 
-        public static bool TryParse(ReadOnlySpan<char> link, out TorrentFile torrentFile)
+        public static bool TryParse(ReadOnlySpan<char> link, out TorrentInfo torrentInfo)
         {
-            torrentFile = null;
+            torrentInfo = null;
 
             // "magnet:?xt=urn:btih:" = 20 chars
             if (link.Length < 20 + 2 * 20)
@@ -118,11 +117,11 @@ namespace Torrent
             if (infoHash is null)
                 return false;
 
-            torrentFile = new TorrentFile()
+            torrentInfo = new TorrentInfo()
             {
                 DisplayName = displayName
             };
-            torrentFile.Trackers.AddRange(trackers);
+            torrentInfo.Trackers.AddRange(trackers);
             return true;
         }
     }

@@ -3,10 +3,10 @@
 // See the license.txt file in the project root for more information.
 using System.Numerics;
 using System.Text;
-using Torrent.BEncoding;
+using MTorrent.BEncoding;
 using Xunit;
 
-namespace Torrent.Tests.BEncoding.Reader
+namespace MTorrent.Tests.BEncoding.Reader
 {
     public class Numbers
     {

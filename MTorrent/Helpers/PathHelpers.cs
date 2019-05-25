@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Torrent.Helpers
+namespace MTorrent.Helpers
 {
     internal static class PathHelpers
     {

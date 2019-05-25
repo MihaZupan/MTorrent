@@ -5,7 +5,7 @@ using System;
 using System.Diagnostics;
 using System.Text;
 
-namespace Torrent.BEncoding
+namespace MTorrent.BEncoding
 {
     internal static class BEncodingHelpers
     {

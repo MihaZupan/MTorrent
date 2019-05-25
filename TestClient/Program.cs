@@ -3,9 +3,9 @@
 // See the license.txt file in the project root for more information.
 using System;
 using System.IO;
-using Torrent.BEncoding.Serialization;
+using MTorrent.BEncoding.Serialization;
 
-namespace Torrent
+namespace MTorrent
 {
     class Program
     {

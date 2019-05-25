@@ -5,46 +5,46 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
-using Torrent.BEncoding.Serialization;
+using MTorrent.BEncoding.Serialization;
 using Xunit;
 
-namespace Torrent.Tests.TorrentFileParsing
+namespace MTorrent.Tests.torrentInfoParsing
 {
     public partial class Parsing
     {
-        private static readonly ConcurrentDictionary<string, byte[]> TorrentFiles = new ConcurrentDictionary<string, byte[]>();
+        private static readonly ConcurrentDictionary<string, byte[]> torrentInfos = new ConcurrentDictionary<string, byte[]>();
 
-        private static byte[] ReadTorrentFile(string torrentFileName)
+        private static byte[] ReadtorrentInfo(string torrentInfoName)
         {
-            if (!TorrentFiles.TryGetValue(torrentFileName, out byte[] torrentBytes))
+            if (!torrentInfos.TryGetValue(torrentInfoName, out byte[] torrentBytes))
             {
-                string torrentFilePath = $"../../../TestTorrents/{torrentFileName}.torrent";
+                string torrentInfoPath = $"../../../TestTorrents/{torrentInfoName}.torrent";
 
-                Assert.True(File.Exists(torrentFilePath), "Test torrent file could not be found");
+                Assert.True(System.IO.File.Exists(torrentInfoPath), "Test torrent file could not be found");
 
-                torrentBytes = File.ReadAllBytes(torrentFilePath);
+                torrentBytes = System.IO.File.ReadAllBytes(torrentInfoPath);
 
-                TorrentFiles.TryAdd(torrentFileName, torrentBytes);
+                torrentInfos.TryAdd(torrentInfoName, torrentBytes);
             }
 
             return torrentBytes;
         }
 
-        private static TorrentFile ReadAndParseTorrentFile(string torrentFileName)
+        private static TorrentInfo ReadAndParsetorrentInfo(string torrentInfoName)
         {
-            var torrentBytes = ReadTorrentFile(torrentFileName);
+            var torrentBytes = ReadtorrentInfo(torrentInfoName);
 
-            Assert.True(TorrentFile.TryParse(torrentBytes, out TorrentFile torrentFile, strictComplianceParsing: true), "Failed to parse torrent");
+            Assert.True(TorrentInfo.TryParse(torrentBytes, out TorrentInfo torrentInfo, strictComplianceParsing: true), "Failed to parse torrent");
 
-            return torrentFile;
+            return torrentInfo;
         }
-        private static TorrentFile ParseTorrentFile(string bencode)
+        private static TorrentInfo ParsetorrentInfo(string bencode)
         {
             var torrentBytes = Encoding.UTF8.GetBytes(bencode);
 
-            Assert.True(TorrentFile.TryParse(torrentBytes, out TorrentFile torrentFile, strictComplianceParsing: true), "Failed to parse torrent");
+            Assert.True(TorrentInfo.TryParse(torrentBytes, out TorrentInfo torrentInfo, strictComplianceParsing: true), "Failed to parse torrent");
 
-            return torrentFile;
+            return torrentInfo;
         }
 
         private static class TestFiles
@@ -67,11 +67,11 @@ namespace Torrent.Tests.TorrentFileParsing
         {
             Debug.Assert(!strictlyValid || valid, "If strictly valid it should also be non-strictly valid");
 
-            byte[] torrentFileBytes = Encoding.UTF8.GetBytes(bencode);
+            byte[] torrentInfoBytes = Encoding.UTF8.GetBytes(bencode);
 
-            Assert.Equal(valid, TorrentFile.TryParse(torrentFileBytes, out _, strictComplianceParsing: false));
+            Assert.Equal(valid, TorrentInfo.TryParse(torrentInfoBytes, out _, strictComplianceParsing: false));
             if (valid)
-                Assert.Equal(strictlyValid, TorrentFile.TryParse(torrentFileBytes, out _, strictComplianceParsing: true));
+                Assert.Equal(strictlyValid, TorrentInfo.TryParse(torrentInfoBytes, out _, strictComplianceParsing: true));
         }
     }
 }

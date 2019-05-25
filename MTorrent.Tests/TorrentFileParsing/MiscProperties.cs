@@ -4,7 +4,7 @@
 using System;
 using Xunit;
 
-namespace Torrent.Tests.TorrentFileParsing
+namespace MTorrent.Tests.torrentInfoParsing
 {
     public partial class Parsing
     {
@@ -14,17 +14,17 @@ namespace Torrent.Tests.TorrentFileParsing
             // 18 because ö is two UTF8 bytes
             string bencode = "d7:comment18:Some UTF8 cömment4:infod6:lengthi0e4:name3:foo12:piece lengthi16384e6:pieces0:ee";
 
-            var torrentFile = ParseTorrentFile(bencode);
+            var torrentInfo = ParsetorrentInfo(bencode);
 
-            Assert.Equal("Some UTF8 cömment", torrentFile.Comment);
+            Assert.Equal("Some UTF8 cömment", torrentInfo.Comment);
         }
 
         [Fact]
         public void ParsesCommentFromFile()
         {
-            TorrentFile torrentFile = ReadAndParseTorrentFile(TestFiles.ProjectEuler);
+            TorrentInfo torrentInfo = ReadAndParsetorrentInfo(TestFiles.ProjectEuler);
 
-            Assert.Equal("This is some Project Euler", torrentFile.Comment);
+            Assert.Equal("This is some Project Euler", torrentInfo.Comment);
         }
 
         [Fact]
@@ -32,17 +32,17 @@ namespace Torrent.Tests.TorrentFileParsing
         {
             string bencode = "d10:created by7:Someone4:infod6:lengthi0e4:name3:foo12:piece lengthi16384e6:pieces0:ee";
 
-            var torrentFile = ParseTorrentFile(bencode);
+            var torrentInfo = ParsetorrentInfo(bencode);
 
-            Assert.Equal("Someone", torrentFile.CreatedBy);
+            Assert.Equal("Someone", torrentInfo.CreatedBy);
         }
 
         [Fact]
         public void ParsesCreatedByFromFile()
         {
-            TorrentFile torrentFile = ReadAndParseTorrentFile(TestFiles.ProjectEuler);
+            TorrentInfo torrentInfo = ReadAndParsetorrentInfo(TestFiles.ProjectEuler);
 
-            Assert.Equal("uTorrent/3.5.5", torrentFile.CreatedBy);
+            Assert.Equal("uTorrent/3.5.5", torrentInfo.CreatedBy);
         }
 
         [Fact]
@@ -50,18 +50,18 @@ namespace Torrent.Tests.TorrentFileParsing
         {
             string bencode = "d13:creation datei330e4:infod6:lengthi0e4:name3:foo12:piece lengthi16384e6:pieces0:ee";
 
-            var torrentFile = ParseTorrentFile(bencode);
+            var torrentInfo = ParsetorrentInfo(bencode);
 
-            Assert.Equal(new DateTime(1970, 1, 1, 0, 5, 30), torrentFile.CreationDate);
+            Assert.Equal(new DateTime(1970, 1, 1, 0, 5, 30), torrentInfo.CreationDate);
         }
 
         [Fact]
         public void ParsesCreationDateFromFile()
         {
-            TorrentFile torrentFile = ReadAndParseTorrentFile(TestFiles.ProjectEuler);
+            TorrentInfo torrentInfo = ReadAndParsetorrentInfo(TestFiles.ProjectEuler);
 
-            Assert.Equal(1558810233, torrentFile.CreationTimeStamp);
-            Assert.Equal(new DateTime(2019, 5, 25, 18, 50, 33), torrentFile.CreationDate);
+            Assert.Equal(1558810233, torrentInfo.CreationTimeStamp);
+            Assert.Equal(new DateTime(2019, 5, 25, 18, 50, 33), torrentInfo.CreationDate);
         }
 
         [Theory]
@@ -74,17 +74,17 @@ namespace Torrent.Tests.TorrentFileParsing
         [InlineData("d13:announce-listll24:https://foo.bar/announceel13:udp://foo.baree4:infod6:lengthi0e4:name3:foo12:piece lengthi16384e6:pieces0:ee", new string[] { "https://foo.bar/announce", "udp://foo.bar" })]
         public void ParsesAnnounceLists(string bencode, string[] announceList)
         {
-            var torrentFile = ParseTorrentFile(bencode);
+            var torrentInfo = ParsetorrentInfo(bencode);
 
-            Assert.Equal(announceList, torrentFile.Trackers);
+            Assert.Equal(announceList, torrentInfo.Trackers);
         }
 
         [Fact]
         public void ParsesAnnounceListFromFile()
         {
-            TorrentFile torrentFile = ReadAndParseTorrentFile(TestFiles.ProjectEuler);
+            TorrentInfo torrentInfo = ReadAndParsetorrentInfo(TestFiles.ProjectEuler);
 
-            Assert.Equal(new[] { "udp://tracker.mihazupan.me" }, torrentFile.Trackers);
+            Assert.Equal(new[] { "udp://tracker.mihazupan.me" }, torrentInfo.Trackers);
         }
 
         [Theory]
@@ -93,17 +93,17 @@ namespace Torrent.Tests.TorrentFileParsing
         [InlineData("d8:encoding0:4:infod6:lengthi0e4:name3:foo12:piece lengthi16384e6:pieces0:ee", "")]
         public void ParsesEncoding(string bencode, string encoding)
         {
-            var torrentFile = ParseTorrentFile(bencode);
+            var torrentInfo = ParsetorrentInfo(bencode);
 
-            Assert.Equal(encoding, torrentFile.Encoding);
+            Assert.Equal(encoding, torrentInfo.Encoding);
         }
 
         [Fact]
         public void ParsesEncodingFromFile()
         {
-            TorrentFile torrentFile = ReadAndParseTorrentFile(TestFiles.ProjectEuler);
+            TorrentInfo torrentInfo = ReadAndParsetorrentInfo(TestFiles.ProjectEuler);
 
-            Assert.Equal("UTF-8", torrentFile.Encoding);
+            Assert.Equal("UTF-8", torrentInfo.Encoding);
         }
     }
 }

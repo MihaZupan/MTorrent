@@ -5,7 +5,7 @@ using System;
 using System.Diagnostics;
 using System.Text;
 
-namespace Torrent.BEncoding.Serialization
+namespace MTorrent.BEncoding.Serialization
 {
     [DebuggerDisplay("{String ?? \"BINARY\"}")]
     public class BString : IBObject

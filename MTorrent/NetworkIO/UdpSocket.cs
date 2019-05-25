@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Torrent.NetworkIO
+namespace MTorrent.NetworkIO
 {
     public class UdpSocket
     {

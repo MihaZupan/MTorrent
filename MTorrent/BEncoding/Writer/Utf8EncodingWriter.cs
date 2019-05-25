@@ -7,7 +7,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace Torrent.BEncoding
+namespace MTorrent.BEncoding
 {
     // Based on Utf8JsonWriter from System.Text.Json
     public partial class Utf8BEncodingWriter

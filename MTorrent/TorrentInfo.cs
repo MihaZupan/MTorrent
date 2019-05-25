@@ -5,54 +5,13 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Security.Cryptography;
-using Torrent.BEncoding.Serialization;
-using Torrent.Enums;
-using Torrent.Helpers;
+using MTorrent.BEncoding.Serialization;
+using MTorrent.Enums;
+using MTorrent.Helpers;
 
-namespace Torrent
+namespace MTorrent
 {
-    internal class TorrentDirectoryDescriptor
-    {
-        public string Name;
-        public List<TorrentDirectoryDescriptor> SubDirs = new List<TorrentDirectoryDescriptor>();
-        public List<TorrentFileDescriptor> Files = new List<TorrentFileDescriptor>();
-
-        public TorrentDirectoryDescriptor(string name)
-        {
-            Name = name ?? throw new ArgumentNullException(nameof(name));
-        }
-    }
-    public class TorrentFileDescriptor
-    {
-        public readonly string[] Path;
-        public readonly long Length;
-        public readonly long Offset;
-
-        public TorrentFileDescriptor(string path, long length, long offset)
-            : this(new[] { path }, length, offset)
-        { }
-        public TorrentFileDescriptor(string[] path, long length, long offset)
-        {
-            Path = path ?? throw new ArgumentNullException(nameof(path));
-            for (int i = 0; i < Path.Length; i++)
-                if (Path[i] is null)
-                    throw new ArgumentNullException("Path parts must not be null");
-
-            Length = length;
-            Offset = offset;
-
-            if (Length < 0)
-                throw new ArgumentOutOfRangeException(nameof(length));
-
-            if (Offset < 0)
-                throw new ArgumentOutOfRangeException(nameof(offset));
-
-            if (length + offset < 0)
-                throw new ArgumentOutOfRangeException("length and offset", "Length and offset overflow");
-        }
-    }
-
-    public class TorrentFile
+    public class TorrentInfo
     {
         public BitTorrentVersion Version { get; private set; }
         public byte[] InfoHashV1 { get; private set; }
@@ -63,7 +22,7 @@ namespace Torrent
         public List<string> Trackers = new List<string>();
 
         private byte[] _pieces;
-        public TorrentFileDescriptor[] Files { get; private set; }
+        public FileDescriptor[] Files { get; private set; }
         public long TotalBytes { get; private set; }
         public int FileCount => Files.Length;
 
@@ -73,7 +32,7 @@ namespace Torrent
         public DateTime? CreationDate = null;
         public string Encoding = null;
 
-        internal TorrentFile(byte[] infoHashV1, byte[] infoHashV2)
+        internal TorrentInfo(byte[] infoHashV1, byte[] infoHashV2)
         {
             if (infoHashV1 is null && infoHashV2 is null)
                 throw new ArgumentException("At least one InfoHash is needed for a magnet link");
@@ -81,12 +40,12 @@ namespace Torrent
             InfoHashV1 = infoHashV1;
             InfoHashV2 = infoHashV2;
         }
-        internal TorrentFile()
+        internal TorrentInfo()
         {
 
         }
 
-        public static bool TryParse(ReadOnlySpan<byte> bytes, out TorrentFile torrent, bool strictComplianceParsing = false)
+        public static bool TryParse(ReadOnlySpan<byte> bytes, out TorrentInfo torrent, bool strictComplianceParsing = false)
         {
             torrent = null;
 
@@ -102,7 +61,7 @@ namespace Torrent
             if (info.Count < 3 || info.Count > 50)
                 return false;
 
-            torrent = new TorrentFile();
+            torrent = new TorrentInfo();
 
             if (!info.TryGet("name", out BString name) || !name.IsString)
                 return false;
@@ -129,7 +88,7 @@ namespace Torrent
                     if (!bLength.TryAs(out long length) || length < 0)
                         return false;
 
-                    torrent.Files = new[] { new TorrentFileDescriptor(torrent.DisplayName, length, offset: 0) };
+                    torrent.Files = new[] { new FileDescriptor(torrent.DisplayName, length, offset: 0) };
                     torrent.TotalBytes = length;
                 }
                 else
@@ -140,7 +99,7 @@ namespace Torrent
                     if (fileList.Count < (strictComplianceParsing ? 2 : 1))
                         return false;
 
-                    var files = new TorrentFileDescriptor[fileList.Count];
+                    var files = new FileDescriptor[fileList.Count];
 
                     long offset = 0;
 
@@ -184,7 +143,7 @@ namespace Torrent
                             path[j] = pathPart;
                         }
 
-                        files[i] = new TorrentFileDescriptor(path, fileLength, offset);
+                        files[i] = new FileDescriptor(path, fileLength, offset);
 
                         offset += fileLength;
                     }

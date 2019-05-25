@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Miha Zupan. All rights reserved.
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
+/*
 using System;
 using System.Buffers;
 using System.Collections.Generic;
@@ -8,11 +9,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using Torrent.BEncoding;
-using Torrent.Enums;
-using Torrent.Helpers;
+using MTorrent.BEncoding;
+using MTorrent.Enums;
+using MTorrent.Helpers;
 
-namespace Torrent
+namespace MTorrent
 {
 
     public class TorrentDirectory
@@ -94,7 +95,7 @@ namespace Torrent
         }
     }
 
-    public class TorrentFileBuilder
+    public class torrentInfoBuilder
     {
         public FileDescriptor File;
         public TorrentDirectory Files;
@@ -137,12 +138,12 @@ namespace Torrent
 
         public Action<long, long> ProgressCallback = null;
 
-        public TorrentFileBuilder(string name, TorrentDirectory directory)
+        public torrentInfoBuilder(string name, TorrentDirectory directory)
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));
             Files = directory ?? throw new ArgumentNullException(nameof(directory));
         }
-        public TorrentFileBuilder(FileDescriptor file)
+        public torrentInfoBuilder(FileDescriptor file)
         {
             File = file ?? throw new ArgumentNullException(nameof(file));
             Name = file.FileName;
@@ -205,7 +206,7 @@ namespace Torrent
                 name
                 piece length
                 pieces (V1)
-            */
+            *//*
 
             if (IsV2)
             {
@@ -339,3 +340,4 @@ namespace Torrent
         }
     }
 }
+*/

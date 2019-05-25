@@ -4,7 +4,7 @@
 using System;
 using System.Diagnostics;
 
-namespace Torrent.Helpers
+namespace MTorrent.Helpers
 {
     public class RollingAverage
     {

@@ -4,7 +4,7 @@
 using System;
 using System.Diagnostics;
 
-namespace Torrent.BEncoding.Serialization
+namespace MTorrent.BEncoding.Serialization
 {
     public static partial class BEncodingSerializer
     {

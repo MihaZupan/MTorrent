@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace Torrent.BEncoding.Serialization
+namespace MTorrent.BEncoding.Serialization
 {
     [DebuggerDisplay("Count: {Count}")]
     public class BDictionary : List<KeyValuePair<BString, IBObject>>, IBObject

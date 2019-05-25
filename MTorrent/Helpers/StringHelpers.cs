@@ -3,7 +3,7 @@
 // See the license.txt file in the project root for more information.
 using System;
 
-namespace Torrent.Helpers
+namespace MTorrent.Helpers
 {
     internal static class StringHelpers
     {

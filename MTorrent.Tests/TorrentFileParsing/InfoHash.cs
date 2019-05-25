@@ -2,10 +2,10 @@
 // This file is licensed under the BSD-Clause 2 license.
 // See the license.txt file in the project root for more information.
 using System;
-using Torrent.Enums;
+using MTorrent.Enums;
 using Xunit;
 
-namespace Torrent.Tests.TorrentFileParsing
+namespace MTorrent.Tests.torrentInfoParsing
 {
     public partial class Parsing
     {
@@ -16,17 +16,17 @@ namespace Torrent.Tests.TorrentFileParsing
         [InlineData(TestFiles.Killswitch, "0BBF263641F111C6122A6019319D7573D10FFABFC6981710218C6CEBA775CACF")]
         [InlineData(TestFiles.InternetsOwnBoy, "CBECA3B91C54DB4B7A7E16BC0CCD9707E00665B5")]
         [InlineData(TestFiles.ProjectEuler, "5B47CA743B1B4AE79F06ED01A8793F92DDD4ACC1")]
-        public void ParsesToCorrectInfoHash(string torrentFileName, string infoHashHex)
+        public void ParsesToCorrectInfoHash(string torrentInfoName, string infoHashHex)
         {
-            TorrentFile torrentFile = ReadAndParseTorrentFile(torrentFileName);
+            TorrentInfo torrentInfo = ReadAndParsetorrentInfo(torrentInfoName);
 
             Assert.Contains(infoHashHex.Length, new[] { 40, 64 });
 
-            var infoHash = infoHashHex.Length == 40 ? torrentFile.InfoHashV1 : torrentFile.InfoHashV2;
+            var infoHash = infoHashHex.Length == 40 ? torrentInfo.InfoHashV1 : torrentInfo.InfoHashV2;
             Assert.True(infoHash != null, "No valid InfoHash found");
             Assert.Equal(infoHashHex.Length / 2, infoHash.Length);
 
-            Assert.True(torrentFile.Version.HasFlag(infoHash.Length == 20 ? BitTorrentVersion.V1 : BitTorrentVersion.V2));
+            Assert.True(torrentInfo.Version.HasFlag(infoHash.Length == 20 ? BitTorrentVersion.V1 : BitTorrentVersion.V2));
 
             string hex = BitConverter.ToString(infoHash).Replace("-", "");
 
