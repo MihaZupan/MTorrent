@@ -218,6 +218,9 @@ namespace Torrent
                 if (!info.TryGet("file tree", out BDictionary fileTree))
                     return false;
 
+                if (!dictionary.TryGet("piece layers", out BDictionary pieceLayers))
+                    return false;
+
                 // file tree
                 //throw new NotImplementedException();
             }
